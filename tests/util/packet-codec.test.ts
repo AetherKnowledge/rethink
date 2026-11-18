@@ -33,6 +33,17 @@ test('decode: toDevice TLV packet, CRC valid', () => {
     assert.equal(d.s, 0x01)
 })
 
+test('decode: LA130GC 0xA7 report uses the same TLV format', () => {
+    // Live LA130GC, firmware 353700: room temperature = 26.5 C.
+    const d = decodePacket('000004000000a70204dc037f50359102')
+    assert.equal(d.protocol, 'tlv')
+    if (d.protocol !== 'tlv') return
+    assert.equal(d.direction, 'fromDevice')
+    assert.equal(d.crcOk, true)
+    assert.equal(d.frame.kind, 0xa7)
+    assert.deepEqual(d.tlv, [{ t: 0x1fd, l: 1, v: 53 }])
+})
+
 test('decode: AABB frame, checksum valid', () => {
     const d = decodePacket(AABB)
     assert.equal(d.protocol, 'aabb')

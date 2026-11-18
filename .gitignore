@@ -7,4 +7,5 @@ node_modules
 *.crt
 dist
 oauth.json
+/config.json
 state
